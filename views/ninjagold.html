@@ -143,11 +143,14 @@
     {% if gamestatus == 'newgame' %}
 
     Swal.fire({
-      title: 'New game!!! what is your gold goal?',
-      input: 'number',
+      title: 'New game!!! What is your gold goal?',
+      input: 'range',
       inputAttributes: {
-        autocapitalize: 'off'
+        min: 10,
+        max: 200,
+        step: 5
       },
+      inputValue: 50,
       showCancelButton: true,
       confirmButtonText: 'Goal',
       showLoaderOnConfirm: true,
