@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Golden Ninja</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+</head>
+
+<body>
+  <div id="golden_ninja">
+    <div class="container pt-5 w-100 text-center">
+
+      <h2>Ninja Gold Game</h2>
+      <div class="d-flex justify-content-between align-items-center p-2">
+        <div class="d-flex">
+          <h5>Your Gold:</h5>
+          <h5 class="ml-2" id="gold">{{ yourgold }}</h5>
+        </div>
+        <h5>Your Goal: {{ goal }}</h5>
+        <a href="/gold/reset" class="btn btn-warning">Reset Game</a>
+      </div>
+
+      <div class="d-flex justify-content-between">
+
+        <div class="card mx-3" style="width: 18rem;">
+          <img style="height: 14rem;"
+            src="https://images.all-free-download.com/images/graphicwebp/cartoon_farm_02_vector_161129.webp"
+            class="card-img-top" alt="farm">
+          <div class="card-body">
+            <h5 class="card-title">Farm</h5>
+            <p class="card-text">Earns 10-20 golds</p>
+            <a href="/gold/process_money/farm" class="btn btn-primary">Find Gold!</a>
+          </div>
+        </div>
+
+
+
+        <div class="card mx-3" style="width: 18rem;">
+          <img style="height: 14rem;"
+            src="https://previews.123rf.com/images/tigatelu/tigatelu1509/tigatelu150900826/45595594-ilustraci%C3%B3n-del-vector-de-entrada-de-la-mina-de-la-historieta-con-la-pala-minera-de-oro-la-celebraci.jpg?fj=1"
+            class="card-img-top" alt="cave">
+          <div class="card-body">
+            <h5 class="card-title">Cave</h5>
+            <p class="card-text">Earns 5-10 golds</p>
+            <a href="/gold/process_money/cave" class="btn btn-primary">Find Gold!</a>
+          </div>
+        </div>
+
+        <div class="card mx-3" style="width: 18rem;">
+          <img style="height: 14rem;"
+            src="https://media.istockphoto.com/vectors/vector-illustration-cartoon-residential-townhouse-vector-id1072291024?s=612x612"
+            class="card-img-top" alt="house">
+          <div class="card-body">
+            <h5 class="card-title">House</h5>
+            <p class="card-text">Earns 2-5 golds</p>
+            <a href="/gold/process_money/house" class="btn btn-primary">Find Gold!</a>
+          </div>
+        </div>
+
+        <div class="card mx-3" style="width: 18rem;">
+          <img style="height: 14rem;"
+            src="https://media.istockphoto.com/vectors/red-slot-machine-wins-the-jackpot-isolated-on-white-background-casino-vector-id843640814?s=612x612"
+            class="card-img-top" alt="casino">
+          <div class="card-body">
+            <h5 class="card-title">Casino</h5>
+            <p class="card-text">Earns/takes 0-50 golds</p>
+            <a href="/gold/process_money/casino" class="btn btn-primary">Find Gold!</a>
+          </div>
+        </div>
+      </div>
+
+
+      <h5 class="h5 mt-3">Activities</h5>
+
+
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Place</th>
+            <th scope="col">Earn/Lose</th>
+            <th scope="col">Amount of Gold</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for activity in activities %}
+
+          <tr class="{{activity.class}}">
+            <th scope="row">{{activity.id}}</th>
+            <td>{{activity.place}}</td>
+            <td>{{activity.earnOrLose}}</td>
+            <td>{{activity.amonunt}}</td>
+            <td>{{activity.date}}</td>
+          </tr>
+          {% endfor %}
+
+
+
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+
+    const gold = document.getElementById('gold').dataset.gold;
+
+    {% if gamestatus == 'gameover' %}
+
+    Swal.fire({
+
+      title: 'Oops... You lost everything',
+      imageUrl: 'https://c.tenor.com/mFODvB0kGjgAAAAd/willy-wonka-angry.gif',
+      imageHeight: 200,
+      text: 'Game over',
+      footer: '<a href="/gold/reset">Play again!</a>'
+    })
+
+    {% endif %}
+
+    {% if gamestatus == 'wingame' %}
+
+    Swal.fire({
+
+      title: 'You WON!!!!!',
+      imageUrl: 'https://c.tenor.com/QwyDTN_0AfAAAAAC/the-goon-win.gif',
+      imageHeight: 200,
+      text: 'Congratulations',
+      footer: '<a href="/gold/reset">Play again!</a>'
+    })
+
+    {% endif %}
+
+    {% if gamestatus == 'newgame' %}
+
+    Swal.fire({
+      title: 'New game!!! what is your gold goal?',
+      input: 'number',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Goal',
+      showLoaderOnConfirm: true,
+      preConfirm: (goal) => {
+        return fetch(`/gold/newgame/${goal}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(response.statusText)
+            }
+            return response.json()
+          })
+          .catch(error => {
+            Swal.showValidationMessage(
+              `Request failed: ${error}`
+            )
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: `Are you ready????`,
+          imageUrl: 'https://c.tenor.com/fk12394PuMQAAAAd/lets-go-ready.gif',
+          imageHeight: 250,
+        }).then(() => {
+          location.reload()
+        })
+
+      }
+    })
+
+    {% endif %}
+
+
+
+
+
+
+
+  </script>
+
+</body>
+
+</html>

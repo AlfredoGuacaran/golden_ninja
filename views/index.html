@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+</head>
+
+<body>
+  <div id="Ramdon_word">
+    <div class="container pt-5 w-50 text-center">
+      <h2 class="pt-3">Random Word</h2>
+
+      <div class="h5 bg-secondary opacity-25 border border-primary">
+
+        <h5>Usted lleva {{ contador }} palabras al azar</h5>
+        <h3>Palabra Random:</h3>
+        <h2>{{ random_word }}</h2>
+
+        <a href="/random" class="btn btn-primary">Generar palabra nueva</a>
+        <a href="/random/reset" class="btn btn-warning">Reiniciar</a>
+
+
+
+
+      </div>
+
+
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <script src="index.js"></script> -->
+</body>
+
+</html>
